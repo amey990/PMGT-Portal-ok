@@ -38,7 +38,7 @@ export default function Dashboard() {
     { label: 'Rescheduled Activities', value: 0  },
   ]
 
-  const dummyData = Array.from({ length: 30 }, (_, i) => ({
+  const dummyData = Array.from({ length: 6 }, (_, i) => ({
     srNo: i + 1,
     date: '07-Feb-2025',
     project: 'Project X',

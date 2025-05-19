@@ -26,6 +26,9 @@ export default function ViewSites() {
     { id:3, project:'Gamma', siteName:'Site C', siteId:'C003', address:'789 Pine Rd', pincode:'330003', poc:'Jim Boe', state:'NY', district:'West' },
     { id:3, project:'Gamma', siteName:'Site C', siteId:'C003', address:'789 Pine Rd', pincode:'330003', poc:'Jim Boe', state:'NY', district:'West' },
     { id:24, project:'Gamma', siteName:'Site C', siteId:'C003', address:'789 Pine Rd', pincode:'330003', poc:'Jim Boe', state:'NY', district:'West' },
+    { id:3, project:'Gamma', siteName:'Site C', siteId:'C003', address:'789 Pine Rd', pincode:'330003', poc:'Jim Boe', state:'NY', district:'West' },
+    { id:3, project:'Gamma', siteName:'Site C', siteId:'C003', address:'789 Pine Rd', pincode:'330003', poc:'Jim Boe', state:'NY', district:'West' },
+    { id:24, project:'Gamma', siteName:'Site C', siteId:'C003', address:'789 Pine Rd', pincode:'330003', poc:'Jim Boe', state:'NY', district:'West' },
    
   ]);
   const [filterProj, setFilterProj] = useState('');
@@ -61,7 +64,16 @@ export default function ViewSites() {
     <MainLayout title="Project Sites" showRightPanel={false}>
       <Box sx={{ pt:2, px:2 }}>
         <Card sx={{ bgcolor:'#1C1C1E', borderRadius:2, height:'calc(100vh - 77px)', overflow:'hidden' }}>
-          <CardContent sx={{ px:2, py:1.5 }}>
+          {/* <CardContent sx={{ px:2, py:1.5 }}> */}
+           <CardContent
+          sx={{
+            px: 2,
+            py: 1.5,
+            height: '100%',           // make CardContent fill its parent
+            display: 'flex',
+            flexDirection: 'column'   // stack header + table vertically
+          }}
+        >
             <Box sx={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:2 }}>
               <Typography sx={{ color:'#fff', fontSize:18, fontWeight:600 }}>Sites List</Typography>
               <Box sx={{ display:'flex', gap:2, flexWrap:'wrap' }}>
@@ -106,11 +118,11 @@ export default function ViewSites() {
                   startIcon={<DownloadIcon />}
                   onClick={handleExport}
                   sx={{
-                    bgcolor:'#22C55E',
+                    bgcolor:'#FFC300',
                     height:32,
-                    color:'#fff',
+                    color:'#000',
                     textTransform:'none',
-                    '&:hover':{ bgcolor:'#16A34A' }
+                    '&:hover':{ bgcolor:'#D4A420' }
                   }}
                 >
                   Export
@@ -120,12 +132,20 @@ export default function ViewSites() {
 
             <Divider sx={{ borderColor:'#333', my:1 }} />
 
-            <TableContainer sx={{
-              flex:1,
-              overflowY:'auto',
-              '&::-webkit-scrollbar':{ width:6 },
-              '&::-webkit-scrollbar-thumb':{ background:'#333', borderRadius:3 }
-            }}>
+           <TableContainer
+              sx={{
+                flex: 1,               // allow it to fill remaining height
+                pb:1,
+                overflowY: 'auto',
+                '&::-webkit-scrollbar': {
+                  width: '6px'
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  background: '#333',
+                  borderRadius: 3
+                }
+              }}
+            >
               <Table stickyHeader sx={{ minWidth:920 }}>
                 <TableHead>
                   <TableRow>
