@@ -119,7 +119,6 @@ export default function ProjectDetails() {
     maintainAspectRatio: false,
     plugins: { legend: { display:false }}
   };
-
   // ─── DUMMY SITE ROWS (now state so we can update/delete) ───
   const [siteRows, setSiteRows] = useState<SiteRow[]>([
     {
@@ -131,6 +130,7 @@ export default function ProjectDetails() {
       state:'CA',
       district:'North',
       city:'Los Angeles',
+      address: '123 Main St',
       bName:'Bob Smith',
       bCode:'BS-01',
       pm:'John Doe',
@@ -150,6 +150,7 @@ export default function ProjectDetails() {
       state:'CA',
       district:'North',
       city:'Los Angeles',
+      address: '123 Main St',
       bName:'Bob Smith',
       bCode:'BS-01',
       pm:'John Doe',
@@ -169,6 +170,7 @@ export default function ProjectDetails() {
       state:'CA',
       district:'North',
       city:'Los Angeles',
+      address: '123 Main St',
       bName:'Bob Smith',
       bCode:'BS-01',
       pm:'John Doe',
@@ -178,10 +180,7 @@ export default function ProjectDetails() {
       nocEngineer:'NOC Eng',
       remarks:'All good',
       status:'Pending'
-    },
-    
-   
-    
+    },  
   ]);
 
   // ─── FILTER & SEARCH ───
@@ -366,9 +365,6 @@ export default function ProjectDetails() {
 
 
         {/* ─── Bottom Card: Activity Summary ─── */}
-
-       
-        
         <Card sx={{
           bgcolor:'#1C1C1E',
           borderRadius:2,
@@ -440,99 +436,6 @@ export default function ProjectDetails() {
             </Box>
             <Divider sx={{borderColor:'#333',mb:1}} />
 
-            {/* <TableContainer
-  sx={{
-    flex: 1,
-    backgroundColor: '#1C1C1E',
-    overflowX: 'auto',
-    overflowY: 'auto',
-    maxHeight: 'calc(100vh - 245px)',   // match your card height minus header
-    '&::-webkit-scrollbar': {
-      width: '6px',    // vertical
-      height: '6px',   // horizontal
-    },
-    '&::-webkit-scrollbar-thumb': {
-      background: '#333',
-      borderRadius: '3px',
-    },
-    '&::-webkit-scrollbar-track': {
-      background: '#1C1C1E',  // so you can see the track
-    },
-    // pb: 2,
-  }}
->
-  <Table stickyHeader sx={{ minWidth: 1800 }}>
-    <TableHead>
-      <TableRow>
-        {[
-          'Sr No','T No','Date','Project','Activity','State','District','City',
-          'B Name','B Code','PM','Vendor','FE Name','FE Mobile','NOC Eng',
-          'Remarks','Status','Update'
-        ].map((col, idx, arr) => (
-          <TableCell
-            key={col}
-            sx={{
-              color: '#fff',
-              backgroundColor: '#0F0F0F',
-              borderBottom: '1px solid #333',
-              fontSize: 12,
-              whiteSpace: 'nowrap',
-              padding: '12px 16px',
-              textAlign: 'center',
-              // optional: round the corners on first/last header cell
-              borderTopLeftRadius: idx === 0 ? 3 : 0,
-              borderTopRightRadius: idx === arr.length - 1 ? 3 : 0,
-            }}
-          >
-            {col}
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-    <TableBody>
-      {displayedSites.map(r => (
-        <TableRow key={r.id} hover>
-          {[
-            r.id, r.tNo, r.date, r.project, r.activity, r.state, r.district, r.city,
-            r.bName, r.bCode, r.pm, r.vendor, r.feName, r.feContact, r.nocEngineer,
-            r.remarks, r.status,
-            <Button
-              key="upd"
-              size="small"
-              variant="outlined"
-              sx={{
-                color: '#fff',
-                borderColor: '#555',
-                textTransform: 'none',
-                '&:hover': { borderColor: '#777' },
-              }}
-              onClick={() => openSiteEdit(r)}
-            >
-              Update
-            </Button>
-          ].map((cell, i) => (
-            <TableCell
-              key={i}
-              sx={{
-                color: i === 16 ? '#22C55E' : '#E0E0E0', // highlight status if you like
-                borderBottom: '1px solid #333',
-                fontSize: 12,
-                whiteSpace: 'nowrap',
-                padding: '12px 16px',
-                textAlign: 'center',
-                verticalAlign: 'middle',
-                ...(i === 17 && { padding: '0 8px' }), // tighter for the button
-              }}
-            >
-              {cell}
-            </TableCell>
-          ))}
-        </TableRow>
-      ))}
-    </TableBody>
-  </Table>
-</TableContainer> */}
-
  <TableContainer
    sx={{
      width: '100%',          // <— prevent it from stretching wider
@@ -558,8 +461,8 @@ export default function ProjectDetails() {
     <TableHead>
       <TableRow>
         {[
-          'Sr No','T No','Date','Project','Activity','State','District','City',
-          'B Name','B Code','PM','Vendor','FE Name','FE Mobile','NOC Eng',
+          'Sr No','TicketNo','Date','Project','Activity','State','District','City','Address',
+          'Branch Name','Branch Code','Project Manager','Vendor','FE Name','FE Mobile','NOC Engineer',
           'Remarks','Status','Update'
         ].map((col, idx, arr) => (
           <TableCell
@@ -585,7 +488,7 @@ export default function ProjectDetails() {
       {displayedSites.map(r => (
         <TableRow key={r.id} hover>
           {[
-            r.id, r.tNo, r.date, r.project, r.activity, r.state, r.district, r.city,
+            r.id, r.tNo, r.date, r.project, r.activity, r.state, r.district, r.city,r.address,
             r.bName, r.bCode, r.pm, r.vendor, r.feName, r.feContact, r.nocEngineer,
             r.remarks, r.status,
             <Button
@@ -606,7 +509,7 @@ export default function ProjectDetails() {
             <TableCell
               key={i}
               sx={{
-                color: i === 16 ? '#22C55E' : '#E0E0E0',
+                color: i === 17 ? '#22C55E' : '#E0E0E0',
                 borderBottom: '1px solid #333',
                 fontSize: 12,
                 whiteSpace: 'nowrap',

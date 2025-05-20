@@ -14,6 +14,7 @@ export interface SiteRow {
   state: string;
   district: string;
   city: string;
+  address: string; 
   bName: string;
   bCode: string;
   pm: string;
@@ -36,12 +37,14 @@ interface UpdateSiteModalProps {
 export default function UpdateSiteModal({
   open, row, onClose, onUpdate, onDelete
 }: UpdateSiteModalProps) {
-  const [form, setForm] = useState<SiteRow>({
+  const [form, setForm] = useState<SiteRow>(
+    {
     id:0, tNo:'', date:'', project:'', activity:'',
-    state:'', district:'', city:'', bName:'', bCode:'',
+    state:'', district:'', city:'', address: '', bName:'', bCode:'',
     pm:'', vendor:'', feName:'', feContact:'',
     nocEngineer:'', remarks:'', status:''
-  });
+  }
+);
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   // populate when row changes
@@ -150,6 +153,17 @@ export default function UpdateSiteModal({
     InputLabelProps={{ sx:{ color:'#aaa' } }}
     sx={{ bgcolor:'#28282B', input:{ color:'#fff' } }}
   />
+
+  {/* Row 4.1: Address */}
+<TextField
+  label="Address"
+  size="small"
+  value={form.address}
+  onChange={handleInput('address')}
+  InputLabelProps={{ sx: { color: '#aaa' } }}
+  sx={{ bgcolor: '#28282B', input: { color: '#fff' } }}
+/>
+
   <TextField
     label="B Name"
     size="small"
