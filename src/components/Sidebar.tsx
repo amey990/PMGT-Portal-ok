@@ -1,4 +1,5 @@
 import { Box, IconButton, Divider } from '@mui/material';
+
 import HomeRoundedIcon            from '@mui/icons-material/Dashboard';
 import AppsRoundedIcon            from '@mui/icons-material/FileCopy';
 import CalendarTodayRoundedIcon   from '@mui/icons-material/CalendarTodayOutlined';
@@ -9,6 +10,7 @@ import ExitToAppRoundedIcon       from '@mui/icons-material/ExitToAppRounded';
 import HelpOutlineRoundedIcon     from '@mui/icons-material/HelpOutlineRounded';
 
 import logo from '../assets/Atlas.png';
+import { useLocation } from 'react-router';
 
 export interface SidebarProps {
   selected: string;
@@ -16,20 +18,59 @@ export interface SidebarProps {
 }
 
 export default function Sidebar({ selected, onMenuClick }: SidebarProps) {
-  const mainIcons = [
-    { Icon: HomeRoundedIcon,  label: 'Home'     },
-    { Icon: AppsRoundedIcon,  label: 'Projects' },
-    { Icon: CalendarTodayRoundedIcon, label: 'Calendar'  },
-    { Icon: ShowChartRoundedIcon,     label: 'Analytics' },
+
+   const location = useLocation();
+   const isAccounts = location.pathname.startsWith('/accounts');
+
+
+  // const mainIcons = [
+  //   { Icon: HomeRoundedIcon,  label: 'Home'     },
+  //   { Icon: AppsRoundedIcon,  label: 'Projects' },
+  //   { Icon: CalendarTodayRoundedIcon, label: 'Calendar'  },
+  //   { Icon: ShowChartRoundedIcon,     label: 'Analytics' },
+  // ];
+  // const midIcons = [
+  //   { Icon: NotificationsNoneRounded, label: 'Notifications' },
+  //   { Icon: PersonRoundedIcon,         label: 'Profile'       },
+  // ];
+  // const bottomIcons = [
+  //   { Icon: ExitToAppRoundedIcon,   label: 'Logout', color: '#FFD700' },
+  //   { Icon: HelpOutlineRoundedIcon, label: 'Help',   color: '#777'    },
+  // ];
+
+   // Atlas app menu
+   const atlasMain = [
+     { Icon: HomeRoundedIcon,  label: 'Home'     },
+     { Icon: AppsRoundedIcon,  label: 'Projects' },
+     { Icon: CalendarTodayRoundedIcon, label: 'Calendar'  },
+     { Icon: ShowChartRoundedIcon,     label: 'Analytics' },
+   ];
+   const atlasMid = [
+     { Icon: NotificationsNoneRounded, label: 'Notifications' },
+     { Icon: PersonRoundedIcon,         label: 'Profile'       },
+   ];
+   const atlasBottom = [
+     { Icon: ExitToAppRoundedIcon,   label: 'Logout', color: '#FFD700' },
+     { Icon: HelpOutlineRoundedIcon, label: 'Help',   color: '#777'    },
+   ];
+
+  // Finance (Accounts) menu
+  const finMain = [
+    { Icon: HomeRoundedIcon, label: 'Accounts Home' },
+    { Icon: AppsRoundedIcon, label: 'Transactions'  },
+    { Icon: CalendarTodayRoundedIcon, label: 'Invoices' },
+    { Icon: ShowChartRoundedIcon,     label: 'Reports'  },
   ];
-  const midIcons = [
-    { Icon: NotificationsNoneRounded, label: 'Notifications' },
-    { Icon: PersonRoundedIcon,         label: 'Profile'       },
+  const finMid = [
+    { Icon: NotificationsNoneRounded, label: 'Alerts'   },
+    { Icon: PersonRoundedIcon,         label: 'Profile'  },
   ];
-  const bottomIcons = [
-    { Icon: ExitToAppRoundedIcon,   label: 'Logout', color: '#FFD700' },
-    { Icon: HelpOutlineRoundedIcon, label: 'Help',   color: '#777'    },
-  ];
+  const finBottom = atlasBottom; // same “Logout” / “Help”
+
+   const mainIcons   = isAccounts ? finMain   : atlasMain;
+   const midIcons    = isAccounts ? finMid    : atlasMid;
+   const bottomIcons = isAccounts ? finBottom : atlasBottom;
+ 
 
   return (
     <Box
