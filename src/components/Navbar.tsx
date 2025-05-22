@@ -100,19 +100,28 @@
 //   );
 // }
 
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Button, IconButton } from '@mui/material';
-import Inventory2Icon from '@mui/icons-material/Inventory2';
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
-import Avatar from '@mui/material/Avatar';
+   
+
+// src/components/Navbar.tsx
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Box, Typography, Button, IconButton } from '@mui/material'
+import Inventory2Icon from '@mui/icons-material/Inventory2'
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
+import Avatar from '@mui/material/Avatar'
+import AppsRoundedIcon from '@mui/icons-material/FileCopy'
 
 interface NavbarProps {
-  title: string;
+  title: string
+  /** when true, show the “Atlas” button */
+  showBackToAtlas?: boolean
 }
 
-export default function Navbar({ title }: NavbarProps) {
-  const navigate = useNavigate();
+export default function Navbar({
+  title,
+  showBackToAtlas = false,
+}: NavbarProps) {
+  const navigate = useNavigate()
 
   return (
     <Box
@@ -129,14 +138,36 @@ export default function Navbar({ title }: NavbarProps) {
         alignItems: 'center',
       }}
     >
-      {/* Page Title */}
-      <Typography sx={{ color: '#fff', fontSize: 20, fontWeight: 600 }}>
-        {title}
-      </Typography>
+      {/* Page Title + optional Atlas button */}
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <Typography sx={{ color: '#fff', fontSize: 20, fontWeight: 600 }}>
+          {title}
+        </Typography>
+      </Box>
 
       {/* Right side buttons */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.7, pr: 3.5 }}>
-        {/* Inventory Button */}
+
+        {showBackToAtlas && (
+          <Button
+            variant="contained"
+             startIcon={<AppsRoundedIcon />}
+            onClick={() => navigate('/dashboard')}
+            sx={{
+              bgcolor: '#3B82F6',
+              color: '#fff',
+              fontSize: 13,
+              fontWeight: 500,
+              textTransform: 'none',
+              px: 1.5,
+              py: 0.5,
+              '&:hover': { bgcolor: '#2563EB' },
+            }}
+          >
+            Atlas
+          </Button>
+        )}
+        {/* Inventory */}
         <Button
           variant="contained"
           startIcon={<Inventory2Icon />}
@@ -146,18 +177,16 @@ export default function Navbar({ title }: NavbarProps) {
             color: '#fff',
             fontSize: 13,
             fontWeight: 500,
+            textTransform: 'none',
             px: 1.5,
             py: 0.5,
-            textTransform: 'none',
-            display: 'flex',
-            gap: 0.5,
             '&:hover': { bgcolor: '#663916' },
           }}
         >
           Inventory
         </Button>
 
-        {/* Accounts Button */}
+        {/* Accounts */}
         <Button
           variant="contained"
           startIcon={<AccountBalanceWalletIcon />}
@@ -167,11 +196,9 @@ export default function Navbar({ title }: NavbarProps) {
             color: '#fff',
             fontSize: 13,
             fontWeight: 500,
+            textTransform: 'none',
             px: 1.5,
             py: 0.5,
-            textTransform: 'none',
-            display: 'flex',
-            gap: 0.5,
             '&:hover': { bgcolor: '#16A34A' },
           }}
         >
@@ -189,7 +216,7 @@ export default function Navbar({ title }: NavbarProps) {
             p: 0.5,
             '&:hover': { bgcolor: '#333' },
           }}
-        >
+        >  
           <Avatar
             alt="User"
             src="/src/assets/icons/user.png"
@@ -198,6 +225,5 @@ export default function Navbar({ title }: NavbarProps) {
         </IconButton>
       </Box>
     </Box>
-  );
+  )
 }
-   
