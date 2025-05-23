@@ -100,27 +100,21 @@
 //   );
 // }
 
-   
-
-// src/components/Navbar.tsx
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, Typography, Button, IconButton } from '@mui/material'
-import Inventory2Icon from '@mui/icons-material/Inventory2'
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
-import Avatar from '@mui/material/Avatar'
+import Inventory2Icon               from '@mui/icons-material/Inventory2'
+import AccountBalanceWalletIcon     from '@mui/icons-material/AccountBalanceWallet'
+import ArrowBackIosNewRoundedIcon   from '@mui/icons-material/ArrowBackIosNewRounded'
+import Avatar                       from '@mui/material/Avatar'
 import AppsRoundedIcon from '@mui/icons-material/FileCopy'
 
 interface NavbarProps {
   title: string
-  /** when true, show the “Atlas” button */
-  showBackToAtlas?: boolean
+  showAtlas?: boolean
 }
 
-export default function Navbar({
-  title,
-  showBackToAtlas = false,
-}: NavbarProps) {
+export default function Navbar({ title, showAtlas = false }: NavbarProps) {
   const navigate = useNavigate()
 
   return (
@@ -138,8 +132,25 @@ export default function Navbar({
         alignItems: 'center',
       }}
     >
-      {/* Page Title + optional Atlas button */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+      {/* Title + optional Back-to-Atlas */}
+      <Box sx={{ display:'flex', alignItems:'center', gap:2 }}>
+        {/* {showAtlas && (
+          <Button
+            variant="contained"
+            startIcon={<AppsRoundedIcon />}
+            onClick={() => navigate('/dashboard')}
+            sx={{
+              bgcolor: '#3B82F6',
+              color: '#fff',
+              fontSize: 13,
+              textTransform: 'none',
+              py: 0.4,
+              '&:hover': { bgcolor: '#2563EB' },
+            }}
+          >
+            Atlas
+          </Button>
+        )} */}
         <Typography sx={{ color: '#fff', fontSize: 20, fontWeight: 600 }}>
           {title}
         </Typography>
@@ -147,27 +158,24 @@ export default function Navbar({
 
       {/* Right side buttons */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.7, pr: 3.5 }}>
-
-        {showBackToAtlas && (
+        {showAtlas && (
           <Button
             variant="contained"
-             startIcon={<AppsRoundedIcon />}
+            startIcon={<AppsRoundedIcon />}
             onClick={() => navigate('/dashboard')}
             sx={{
               bgcolor: '#3B82F6',
               color: '#fff',
               fontSize: 13,
-              fontWeight: 500,
               textTransform: 'none',
-              px: 1.5,
-              py: 0.5,
+              py: 0.4,
               '&:hover': { bgcolor: '#2563EB' },
             }}
           >
             Atlas
           </Button>
         )}
-        {/* Inventory */}
+        
         <Button
           variant="contained"
           startIcon={<Inventory2Icon />}
@@ -177,16 +185,15 @@ export default function Navbar({
             color: '#fff',
             fontSize: 13,
             fontWeight: 500,
-            textTransform: 'none',
             px: 1.5,
             py: 0.5,
+            textTransform: 'none',
             '&:hover': { bgcolor: '#663916' },
           }}
         >
           Inventory
         </Button>
 
-        {/* Accounts */}
         <Button
           variant="contained"
           startIcon={<AccountBalanceWalletIcon />}
@@ -196,16 +203,15 @@ export default function Navbar({
             color: '#fff',
             fontSize: 13,
             fontWeight: 500,
-            textTransform: 'none',
             px: 1.5,
             py: 0.5,
+            textTransform: 'none',
             '&:hover': { bgcolor: '#16A34A' },
           }}
         >
           Accounts
         </Button>
 
-        {/* User Avatar */}
         <IconButton
           onClick={() => navigate('/profile')}
           sx={{
@@ -216,7 +222,7 @@ export default function Navbar({
             p: 0.5,
             '&:hover': { bgcolor: '#333' },
           }}
-        >  
+        >
           <Avatar
             alt="User"
             src="/src/assets/icons/user.png"

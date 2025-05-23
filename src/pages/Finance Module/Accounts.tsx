@@ -20,9 +20,11 @@
 //     </MainLayout>
 //   )
 // }
-// src/pages/FinanceModule/Accounts.tsx
-import React, { useState, useMemo } from 'react';
-import MainLayout from '../../layouts/MainLayout';
+
+
+import React, { useState, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
+import MainLayout from '../../layouts/MainLayout'
 import {
   Box,
   Card,
@@ -45,25 +47,26 @@ import {
   Snackbar,
   Alert,
   SelectChangeEvent,
-} from '@mui/material';
-// import DownloadIcon from '@mui/icons-material/Download';
-import DownloadIcon from '@mui/icons-material/Download';
-import type { SnackbarCloseReason } from '@mui/material';
+  TablePagination,
+} from '@mui/material'
+import DownloadIcon from '@mui/icons-material/Download'
 
 interface AccountRow {
-  id: number;
-  customer: string;
-  projectCode: string;
-  projectName: string;
-  projectType: string;
-  manager: string;
-  bdm: string;
-  startDate: string;
-  endDate: string;
+  id: number
+  customer: string
+  projectCode: string
+  projectName: string
+  projectType: string
+  manager: string
+  bdm: string
+  startDate: string
+  endDate: string
 }
 
 export default function Accounts() {
-  // ─── State ──────────────────────────────────────
+  const navigate = useNavigate()
+
+  // ─── Dummy data ──────────────────────────────────────
   const [rows] = useState<AccountRow[]>([
     {
       id: 1,
@@ -87,16 +90,117 @@ export default function Accounts() {
       startDate: '06/15/2025',
       endDate: '07/15/2025',
     },
-    // …add more rows as needed…
-  ]);
+    {
+      id: 3,
+      customer: 'Beta LLC',
+      projectCode: 'BT-002',
+      projectName: 'Beta',
+      projectType: 'Upgrade',
+      manager: 'Jane Roe',
+      bdm: 'Carol Nguyen',
+      startDate: '06/15/2025',
+      endDate: '07/15/2025',
+    },
+    {
+      id: 4,
+      customer: 'Beta LLC',
+      projectCode: 'BT-002',
+      projectName: 'Beta',
+      projectType: 'Upgrade',
+      manager: 'Jane Roe',
+      bdm: 'Carol Nguyen',
+      startDate: '06/15/2025',
+      endDate: '07/15/2025',
+    },
+    {
+      id: 5,
+      customer: 'Beta LLC',
+      projectCode: 'BT-002',
+      projectName: 'Beta',
+      projectType: 'Upgrade',
+      manager: 'Jane Roe',
+      bdm: 'Carol Nguyen',
+      startDate: '06/15/2025',
+      endDate: '07/15/2025',
+    },
+    {
+      id: 6,
+      customer: 'Beta LLC',
+      projectCode: 'BT-002',
+      projectName: 'Beta',
+      projectType: 'Upgrade',
+      manager: 'Jane Roe',
+      bdm: 'Carol Nguyen',
+      startDate: '06/15/2025',
+      endDate: '07/15/2025',
+    },
+    {
+      id: 7,
+      customer: 'Beta LLC',
+      projectCode: 'BT-002',
+      projectName: 'Beta',
+      projectType: 'Upgrade',
+      manager: 'Jane Roe',
+      bdm: 'Carol Nguyen',
+      startDate: '06/15/2025',
+      endDate: '07/15/2025',
+    },
+    {
+      id: 8,
+      customer: 'Beta LLC',
+      projectCode: 'BT-002',
+      projectName: 'Beta',
+      projectType: 'Upgrade',
+      manager: 'Jane Roe',
+      bdm: 'Carol Nguyen',
+      startDate: '06/15/2025',
+      endDate: '07/15/2025',
+    },
+    {
+      id: 9,
+      customer: 'Beta LLC',
+      projectCode: 'BT-002',
+      projectName: 'Beta',
+      projectType: 'Upgrade',
+      manager: 'Jane Roe',
+      bdm: 'Carol Nguyen',
+      startDate: '06/15/2025',
+      endDate: '07/15/2025',
+    },
+    {
+      id: 10,
+      customer: 'Beta LLC',
+      projectCode: 'BT-002',
+      projectName: 'Beta',
+      projectType: 'Upgrade',
+      manager: 'Jane Roe',
+      bdm: 'Carol Nguyen',
+      startDate: '06/15/2025',
+      endDate: '07/15/2025',
+    },
+    {
+      id: 11,
+      customer: 'Beta LLC',
+      projectCode: 'BT-002',
+      projectName: 'Beta',
+      projectType: 'Upgrade',
+      manager: 'Jane Roe',
+      bdm: 'Carol Nguyen',
+      startDate: '06/15/2025',
+      endDate: '07/15/2025',
+    },
+    // …more rows…
+  ])
 
-  const [filterProj, setFilterProj] = useState<string>('');
-  const [search, setSearch] = useState<string>('');
-  const [exportToast, setExportToast] = useState(false);
-  const [actionToast, setActionToast] = useState(false);
-  const [actionMsg, setActionMsg] = useState('');
+  // ─── Filters & pagination state ──────────────────────
+  const [filterProj, setFilterProj] = useState<string>('')
+  const [search, setSearch] = useState<string>('')
+  const [exportToast, setExportToast] = useState(false)
 
-  // ─── Filtering ──────────────────────────────────
+  const [page, setPage] = useState(0)
+  const [rowsPerPage, setRowsPerPage] = useState(20)
+
+  // ─── Filtered rows ────────────────────────────────────
   const displayed = useMemo(
     () =>
       rows
@@ -105,28 +209,40 @@ export default function Accounts() {
           r.projectName.toLowerCase().includes(search.toLowerCase())
         ),
     [rows, filterProj, search]
-  );
+  )
 
-  // ─── Handlers ───────────────────────────────────
-  const handleExport = () => setExportToast(true);
-  const handleCloseExport = (_: any, reason?: SnackbarCloseReason) => {
-    if (reason === 'clickaway') return;
-    setExportToast(false);
-  };
+  const paginated = displayed.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  )
+
+  // ─── Handlers ────────────────────────────────────────
+  const handleExport = () => setExportToast(true)
+  const handleCloseExport = (_: any, reason?: string) => {
+    if (reason === 'clickaway') return
+    setExportToast(false)
+  }
 
   const handleDownload = (r: AccountRow) => {
-    setActionMsg(`Downloaded PA list for ${r.projectName}`);
-    setActionToast(true);
-  };
-  const handleRaisePA = (r: AccountRow) => {
-    setActionMsg(`Raised PA for ${r.projectName}`);
-    setActionToast(true);
-  };
-  const handleCloseAction = () => setActionToast(false);
+    // your download logic…
+    setExportToast(true)
+  }
 
-  // ─── Render ────────────────────────────────────
+  const handleRaisePA = (r: AccountRow) => {
+    navigate('/raise-pa') // or `/raise-pa/${r.id}` if you need the ID
+  }
+
+  const handleChangePage = (_: any, newPage: number) => {
+    setPage(newPage)
+  }
+  const handleChangeRowsPerPage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(e.target.value, 10))
+    setPage(0)
+  }
+
+  // ─── Render ─────────────────────────────────────────
   return (
-    <MainLayout title="Accounts" showRightPanel={false}>
+    <MainLayout title="Atlas Accounting" showRightPanel={false}>
       <Box sx={{ pt: 2, px: 2 }}>
         <Card
           sx={{
@@ -146,7 +262,7 @@ export default function Accounts() {
               flexDirection: 'column',
             }}
           >
-            {/* ─── Header Controls ───────────────────────── */}
+            {/* Header controls */}
             <Box
               sx={{
                 display: 'flex',
@@ -154,10 +270,8 @@ export default function Accounts() {
                 alignItems: 'center',
               }}
             >
-              <Typography
-                sx={{ color: '#fff', fontSize: 18, fontWeight: 600 }}
-              >
-                Accounts
+              <Typography sx={{ color: '#fff', fontSize: 18, fontWeight: 600 }}>
+                Projects List
               </Typography>
 
               <Box sx={{ display: 'flex', gap: 2 }}>
@@ -206,9 +320,7 @@ export default function Accounts() {
                       '& .MuiSelect-icon': { color: '#888', fontSize: 16 },
                     }}
                     MenuProps={{
-                      PaperProps: {
-                        sx: { bgcolor: '#28282B', color: '#fff' },
-                      },
+                      PaperProps: { sx: { bgcolor: '#28282B', color: '#fff' } },
                     }}
                   >
                     <MenuItem value="">All</MenuItem>
@@ -243,12 +355,11 @@ export default function Accounts() {
 
             <Divider sx={{ borderColor: '#333', my: 1 }} />
 
-            {/* ─── Table ─────────────────────────────────── */}
+            {/* Table */}
             <TableContainer
               sx={{
                 flex: 1,
                 overflowY: 'auto',
-                maxHeight: 'calc(100vh - 170px)',
                 '&::-webkit-scrollbar': { width: 6 },
                 '&::-webkit-scrollbar-thumb': {
                   background: '#333',
@@ -293,7 +404,7 @@ export default function Accounts() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {displayed.map(r => (
+                  {paginated.map(r => (
                     <TableRow key={r.id} hover>
                       <TableCell
                         sx={{
@@ -307,131 +418,28 @@ export default function Accounts() {
                       >
                         {r.id}
                       </TableCell>
-                      <TableCell
-                        sx={{
-                          color: '#E0E0E0',
-                          borderBottom: '1px solid #333',
-                          fontSize: 12,
-                          textAlign: 'center',
-                          px: 2,
-                          py: 1.5,
-                        }}
-                      >
-                        {r.customer}
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          color: '#E0E0E0',
-                          borderBottom: '1px solid #333',
-                          fontSize: 12,
-                          textAlign: 'center',
-                          px: 2,
-                          py: 1.5,
-                        }}
-                      >
-                        {r.projectCode}
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          color: '#E0E0E0',
-                          borderBottom: '1px solid #333',
-                          fontSize: 12,
-                          textAlign: 'center',
-                          px: 2,
-                          py: 1.5,
-                        }}
-                      >
-                        {r.projectName}
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          color: '#E0E0E0',
-                          borderBottom: '1px solid #333',
-                          fontSize: 12,
-                          textAlign: 'center',
-                          px: 2,
-                          py: 1.5,
-                        }}
-                      >
-                        {r.projectType}
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          color: '#E0E0E0',
-                          borderBottom: '1px solid #333',
-                          fontSize: 12,
-                          textAlign: 'center',
-                          px: 2,
-                          py: 1.5,
-                        }}
-                      >
-                        {r.manager}
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          color: '#E0E0E0',
-                          borderBottom: '1px solid #333',
-                          fontSize: 12,
-                          textAlign: 'center',
-                          px: 2,
-                          py: 1.5,
-                        }}
-                      >
-                        {r.bdm}
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          color: '#E0E0E0',
-                          borderBottom: '1px solid #333',
-                          fontSize: 12,
-                          textAlign: 'center',
-                          px: 2,
-                          py: 1.5,
-                        }}
-                      >
-                        {r.startDate}
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          color: '#E0E0E0',
-                          borderBottom: '1px solid #333',
-                          fontSize: 12,
-                          textAlign: 'center',
-                          px: 2,
-                          py: 1.5,
-                        }}
-                      >
-                        {r.endDate}
-                      </TableCell>
-
-                      {/* Download PA List */}
-                      <TableCell
-                        sx={{
-                          borderBottom: '1px solid #333',
-                          textAlign: 'center',
-                        }}
-                      >
+                      <TableCell sx={cellSx}>{r.customer}</TableCell>
+                      <TableCell sx={cellSx}>{r.projectCode}</TableCell>
+                      <TableCell sx={cellSx}>{r.projectName}</TableCell>
+                      <TableCell sx={cellSx}>{r.projectType}</TableCell>
+                      <TableCell sx={cellSx}>{r.manager}</TableCell>
+                      <TableCell sx={cellSx}>{r.bdm}</TableCell>
+                      <TableCell sx={cellSx}>{r.startDate}</TableCell>
+                      <TableCell sx={cellSx}>{r.endDate}</TableCell>
+                      <TableCell sx={{ borderBottom:'1px solid #333', textAlign:'center' }}>
                         <IconButton
                           onClick={() => handleDownload(r)}
                           sx={{
-                            bgcolor: '#FFC300',
-                            color: '#000',
+                            color: '#FFC300',
+                            '&:hover': { bgcolor: 'rgba(255,195,0,0.2)' },
                             width: 32,
                             height: 32,
-                            '&:hover': { bgcolor: '#D4A420' },
                           }}
                         >
                           <DownloadIcon fontSize="small" />
                         </IconButton>
                       </TableCell>
-
-                      {/* Raise PA */}
-                      <TableCell
-                        sx={{
-                          borderBottom: '1px solid #333',
-                          textAlign: 'center',
-                        }}
-                      >
+                      <TableCell sx={{ borderBottom:'1px solid #333', textAlign:'center' }}>
                         <Button
                           size="small"
                           variant="contained"
@@ -451,6 +459,35 @@ export default function Accounts() {
                 </TableBody>
               </Table>
             </TableContainer>
+
+            {/* Pagination */}
+            <Box sx={{ py: 2 /* vertical padding */, px: 1 /* optional horizontal padding */ }}>
+  <TablePagination
+    rowsPerPageOptions={[10, 20, 50]}
+    component="div"
+    count={displayed.length}
+    rowsPerPage={rowsPerPage}
+    page={page}
+    onPageChange={handleChangePage}
+    onRowsPerPageChange={handleChangeRowsPerPage}
+    sx={{
+      bgcolor: '#1C1C1E',
+      '& .MuiTablePagination-toolbar': { minHeight: '48px' },
+      '& .MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows': {
+        color: '#fff',
+        fontSize: 12,
+      },
+      '& .MuiSelect-select, .MuiInputBase-input': {
+        color: '#fff',
+        fontSize: 12,
+      },
+      '& .MuiTablePagination-actions button': {
+        color: '#fff',
+      },
+    }}
+  />
+</Box>
+
           </CardContent>
         </Card>
       </Box>
@@ -468,26 +505,19 @@ export default function Accounts() {
           variant="outlined"
           sx={{ bgcolor: 'background.paper', borderColor: '#4caf50', boxShadow: 1 }}
         >
-          project List exported successfully
-        </Alert>
-      </Snackbar>
-
-      {/* Download / Raise PA Snackbar */}
-      <Snackbar
-        open={actionToast}
-        autoHideDuration={1200}
-        onClose={handleCloseAction}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      >
-        <Alert
-          onClose={handleCloseAction}
-          severity="success"
-          variant="outlined"
-          sx={{ bgcolor: 'background.paper', borderColor: '#4caf50', boxShadow: 1 }}
-        >
-          {actionMsg}
+          Project list exported successfully
         </Alert>
       </Snackbar>
     </MainLayout>
-  );
+  )
+}
+
+// shared cell styles
+const cellSx = {
+  color: '#E0E0E0',
+  borderBottom: '1px solid #333',
+  fontSize: 12,
+  textAlign: 'center',
+  px: 2,
+  py: 1.5,
 }
